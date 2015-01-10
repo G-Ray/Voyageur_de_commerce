@@ -15,6 +15,6 @@ public class Main {
         Backtracking b = new Backtracking(graph);
         long temps_debut = System.currentTimeMillis();
         b.genererTousLesCircuits(0, graph.length);
-        System.out.println("Backtracking : " + (System.currentTimeMillis() - temps_debut) + "ms");
+        System.out.println("Temps d'execution Backtracking : " + (System.currentTimeMillis() - temps_debut) + "ms");
     }
 }

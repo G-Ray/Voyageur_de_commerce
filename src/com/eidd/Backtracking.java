@@ -8,9 +8,11 @@ public class Backtracking {
      * Le graphe a parcourir, contient le poids de chaque arc
      */
     int graph[][];
+    int nb_operations;
 
     Backtracking(int [][] graph) {
         this.graph = graph;
+        nb_operations = 0;
     }
 
     private LinkedList<Integer> meilleurChemin;
@@ -54,7 +56,11 @@ public class Backtracking {
      * @param n nombre de sommets
      */
     public void genererCircuits(LinkedList<Integer> chemin, int n) {
+        // Branch and bound
         if(meilleurChemin!=null && distance(chemin) > distance(meilleurChemin)) return;
+
+        nb_operations++;
+
         if(chemin.size() == n) { // Tous les sommets sont visites
             if(arcExiste(chemin.peekFirst(), chemin.peekLast())) { // On a un cycle hamiltonien
                 chemin.addLast(chemin.peekFirst());
@@ -85,5 +91,6 @@ public class Backtracking {
         chemin.addLast(depart);
         genererCircuits(chemin, n);
         System.out.println("Meilleur chemin : " + meilleurChemin + " : " + distance(meilleurChemin));
+        System.out.println("Nombre de circuits partiels generes : " + this.nb_operations);
     }
 }
