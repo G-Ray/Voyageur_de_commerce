@@ -54,6 +54,7 @@ public class Backtracking {
      * @param n nombre de sommets
      */
     public void genererCircuits(LinkedList<Integer> chemin, int n) {
+        if(meilleurChemin!=null && distance(chemin) > distance(meilleurChemin)) return;
         if(chemin.size() == n) { // Tous les sommets sont visites
             if(arcExiste(chemin.peekFirst(), chemin.peekLast())) { // On a un cycle hamiltonien
                 chemin.addLast(chemin.peekFirst());
