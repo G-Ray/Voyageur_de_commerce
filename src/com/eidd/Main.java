@@ -16,5 +16,9 @@ public class Main {
         long temps_debut = System.currentTimeMillis();
         b.genererTousLesCircuits(0, graph.length);
         System.out.println("Temps d'execution Backtracking : " + (System.currentTimeMillis() - temps_debut) + "ms");
+        Prog_dynamique p = new Prog_dynamique(graph);
+        temps_debut = System.currentTimeMillis();
+        p.coutCircuitMin(0, graph.length);
+        System.out.println("Temps d'execution Prog_dynamique : " + (System.currentTimeMillis() - temps_debut) + "ms");
     }
 }
