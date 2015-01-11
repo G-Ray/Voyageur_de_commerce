@@ -38,7 +38,7 @@ public class Backtracking {
     }
 
     /**
-     * Calcule de la distance totale d'un chemin
+     * Calcule la distance totale d'un chemin
      * @param chemin le chemin a analyser
      * @return la distance totale du chemin
      */
@@ -65,9 +65,10 @@ public class Backtracking {
             if(arcExiste(chemin.peekFirst(), chemin.peekLast())) { // On a un cycle hamiltonien
                 chemin.addLast(chemin.peekFirst());
                 if(meilleurChemin == null) meilleurChemin = chemin;
-                else if(distance(chemin) < distance(meilleurChemin))
+                else if(distance(chemin) < distance(meilleurChemin)) {
                     meilleurChemin = (LinkedList<Integer>) chemin.clone();
-                System.out.println(chemin + ":" + distance(chemin));
+                    System.out.println(chemin + ":" + distance(chemin));
+                }
             }
         }
         else { // Tous les sommets n'ont pas ete visistes

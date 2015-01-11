@@ -12,7 +12,7 @@ public class Prog_dynamique {
 
     Prog_dynamique(int[][] graph) {
         this.graph = graph;
-        nb_operations = 0;
+        nb_operations = 0;;
     }
 
     private LinkedList<Integer> meilleurChemin;
@@ -38,7 +38,7 @@ public class Prog_dynamique {
     }
 
     /**
-     * Calcule de la distance totale d'un chemin
+     * Calcule la distance totale d'un chemin
      * @param chemin le chemin a analyser
      * @return la distance totale du chemin
      */
@@ -51,27 +51,30 @@ public class Prog_dynamique {
     }
 
     public int coutSousCircuitMin(int depart, int dernier, LinkedList<Integer> circuit) {
-        int ret = 9999;
-        System.out.println(circuit + " " + depart + dernier);
-        if(!circuit.contains(depart) || !circuit.contains(dernier)) return ret;
+        System.out.println(circuit + " depart " + depart + " arrivee " + dernier);
 
+        int c = -1;
         if(circuit.isEmpty()) {
-            System.out.print("empty");
-            ret = poids(depart, dernier);
+            c = poids(depart, dernier);
         }
         else {
-            ret = 9999;
             for(int i=0; i<circuit.size(); i++) {
                 if(circuit.contains(i) && arcExiste(dernier, i)) {
-                    circuit.removeLast();
-                    int cout = poids(dernier, i) + coutSousCircuitMin(depart, i, circuit);
-                    System.out.println(cout);
-                    ret = Math.min(ret, cout);
+                    LinkedList<Integer> tmp = (LinkedList<Integer>) circuit.clone();
+                    tmp.removeFirstOccurrence(i);
+                    int cout = poids(dernier, i) + coutSousCircuitMin(depart, i, tmp);
+                    //System.out.println("noeud " + i + " cout: " + cout);
+                    if (c!=-1 && depart != dernier){
+                        c = Math.min(c, cout);
+                    }else {
+                        c = cout;
+                    }
+                    
                 }
             }
         }
-        //System.out.println(ret);
-        return ret;
+
+        return c;
     }
 
     public void coutCircuitMin(int depart, int n) {
@@ -80,8 +83,8 @@ public class Prog_dynamique {
             circuit.addLast(i);
         }
         //System.out.println(circuit);
-        //circuit.removeLast();
+        //circuit.removeFirstOccurrence(depart);
         int cout = coutSousCircuitMin(depart, depart, circuit);
-        System.out.println(cout);
+        System.out.println("meilleur cout " + cout);
     }
 }
