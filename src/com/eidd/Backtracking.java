@@ -67,7 +67,7 @@ public class Backtracking {
                 if(meilleurChemin == null) meilleurChemin = chemin;
                 else if(distance(chemin) < distance(meilleurChemin)) {
                     meilleurChemin = (LinkedList<Integer>) chemin.clone();
-                    System.out.println(chemin + ":" + distance(chemin));
+                    //System.out.println(chemin + ":" + distance(chemin));
                 }
             }
         }

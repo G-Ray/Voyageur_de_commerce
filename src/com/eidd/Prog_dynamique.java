@@ -1,5 +1,9 @@
 package com.eidd;
 
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Prog_dynamique {
@@ -7,14 +11,15 @@ public class Prog_dynamique {
     /**
      * Le graphe a parcourir, contient le poids de chaque arc
      */
-    int graph[][];
-    int couts[][];
-    int nb_operations;
+    private int graph[][];
+    private int nb_operations;
+    //public static HashMap<Couple, Integer> cache = new HashMap<Couple, Integer>();
+    Table<Integer, LinkedList<Integer>, Integer> cache = HashBasedTable.create();
+    Table<Integer, LinkedList<Integer>, Integer> chemin = HashBasedTable.create();
 
     Prog_dynamique(int[][] graph) {
         this.graph = graph;
-        couts = graph.clone();
-        nb_operations = 0;;
+        nb_operations = 0;
     }
 
     private LinkedList<Integer> meilleurChemin;
@@ -52,32 +57,34 @@ public class Prog_dynamique {
         return dist;
     }
 
-    public int coutSousCircuitMin(int depart, int dernier, LinkedList<Integer> circuit) {
+    public int coutSousCircuitMin(int v1, int vi, LinkedList<Integer> circuit) {
         int c = 99;
 
-        //System.out.println(circuit + " depart " + depart + " arrivee " + dernier);
-        if(circuit.contains(depart) || circuit.contains(dernier)) return 99;
-        //System.out.println("#####" + circuit.size());
+        if(cache.contains(vi, circuit)) {
+            //System.out.println("CACHE");
+            c = cache.get(vi, circuit);
+            return c;
+        }
+
+        //System.out.println("Cout ss-circuit " + depart + " " + dernier);
+        nb_operations++;
 
         if(circuit.isEmpty()) {
-            //System.out.println("VIDDEE");
-            c = poids(dernier, depart);
+            //System.out.println("VIDE");
+            c = poids(vi, v1);
         }
         else {
-            for(int i=0; i<circuit.size(); i++) {
-                int j = circuit.get(i);
-                if(circuit.contains(j) && arcExiste(dernier, j)) {
-                    LinkedList<Integer> tmp = (LinkedList<Integer>) circuit.clone();
-                    tmp.removeFirstOccurrence(j);
-                    int cout = poids(dernier, j) + coutSousCircuitMin(depart, j, tmp);
+            for(int i : circuit) {
+                if(arcExiste(vi, i)) {
+                    LinkedList<Integer> l = (LinkedList<Integer>) circuit.clone();
+                    l.removeFirstOccurrence(i);
+                    int cout = poids(vi, i) + coutSousCircuitMin(v1, i, l);
                     c = Math.min(c, cout);
+                    if(c < cout) chemin.put(vi, circuit, i);
                 }
             }
         }
-        
-        //if(c == 0)  c = 9999;
-
-        //couts[depart][dernier] = c;
+        cache.put(vi, circuit, c);
         return c;
     }
 
@@ -86,17 +93,12 @@ public class Prog_dynamique {
         for(int i=0; i<n; i++) {
             circuit.addLast(i);
         }
-        
-        circuit.removeLastOccurrence(depart);
+
+        circuit.removeFirstOccurrence(depart);
+
         System.out.println(circuit);
         int cout = coutSousCircuitMin(depart, depart, circuit);
         System.out.println("meilleur cout " + cout);
-        /*for(int i=0; i<couts.length; i++) {
-            System.out.print("|");
-            for(int j=0; j<couts.length; j++) {
-                System.out.print(graph[i][j] + "|");
-            }
-            System.out.println("");
-        }*/
+        System.out.println("operations " + nb_operations);
     }
 }
