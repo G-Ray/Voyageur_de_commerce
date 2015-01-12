@@ -8,10 +8,12 @@ public class Prog_dynamique {
      * Le graphe a parcourir, contient le poids de chaque arc
      */
     int graph[][];
+    int couts[][];
     int nb_operations;
 
     Prog_dynamique(int[][] graph) {
         this.graph = graph;
+        couts = graph.clone();
         nb_operations = 0;;
     }
 
@@ -51,29 +53,31 @@ public class Prog_dynamique {
     }
 
     public int coutSousCircuitMin(int depart, int dernier, LinkedList<Integer> circuit) {
-        System.out.println(circuit + " depart " + depart + " arrivee " + dernier);
+        int c = 99;
 
-        int c = -1;
+        //System.out.println(circuit + " depart " + depart + " arrivee " + dernier);
+        if(circuit.contains(depart) || circuit.contains(dernier)) return 99;
+        //System.out.println("#####" + circuit.size());
+
         if(circuit.isEmpty()) {
-            c = poids(depart, dernier);
+            //System.out.println("VIDDEE");
+            c = poids(dernier, depart);
         }
         else {
             for(int i=0; i<circuit.size(); i++) {
-                if(circuit.contains(i) && arcExiste(dernier, i)) {
+                int j = circuit.get(i);
+                if(circuit.contains(j) && arcExiste(dernier, j)) {
                     LinkedList<Integer> tmp = (LinkedList<Integer>) circuit.clone();
-                    tmp.removeFirstOccurrence(i);
-                    int cout = poids(dernier, i) + coutSousCircuitMin(depart, i, tmp);
-                    //System.out.println("noeud " + i + " cout: " + cout);
-                    if (c!=-1 && depart != dernier){
-                        c = Math.min(c, cout);
-                    }else {
-                        c = cout;
-                    }
-                    
+                    tmp.removeFirstOccurrence(j);
+                    int cout = poids(dernier, j) + coutSousCircuitMin(depart, j, tmp);
+                    c = Math.min(c, cout);
                 }
             }
         }
+        
+        //if(c == 0)  c = 9999;
 
+        //couts[depart][dernier] = c;
         return c;
     }
 
@@ -82,9 +86,17 @@ public class Prog_dynamique {
         for(int i=0; i<n; i++) {
             circuit.addLast(i);
         }
-        //System.out.println(circuit);
-        //circuit.removeFirstOccurrence(depart);
+        
+        circuit.removeLastOccurrence(depart);
+        System.out.println(circuit);
         int cout = coutSousCircuitMin(depart, depart, circuit);
         System.out.println("meilleur cout " + cout);
+        /*for(int i=0; i<couts.length; i++) {
+            System.out.print("|");
+            for(int j=0; j<couts.length; j++) {
+                System.out.print(graph[i][j] + "|");
+            }
+            System.out.println("");
+        }*/
     }
 }
