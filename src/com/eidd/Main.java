@@ -25,7 +25,7 @@ public class Main {
         System.out.println("Couts des transports : ");
         //int m = sc.nextInt();
 
-        int n = 18;
+        int n = 12;
         int m = 8;
 
         int graph[][] = new int[n][n];

@@ -56,6 +56,13 @@ public class Prog_dynamique {
         return dist;
     }
 
+    /**
+     * Calule le cout minimum de chaque sous-cricuit
+     * @param v1 le noeud de depart
+     * @param vi le noeud d'arrivée
+     * @param circuit le sous-circuit
+     * @return le cout du sous-circuit
+     */
     public int coutSousCircuitMin(int v1, int vi, LinkedList<Integer> circuit) {
         int c = 99;
 
@@ -87,6 +94,11 @@ public class Prog_dynamique {
         return c;
     }
 
+    /**
+     * Lance le premier circuit
+     * @param depart: le sommet de depart
+     * @param n: le nombre de sommets
+     */
     public void coutCircuitMin(int depart, int n) {
         LinkedList<Integer> circuit = new LinkedList<Integer>();
         for(int i=0; i<n; i++) {
